@@ -23,11 +23,29 @@
 <body>
     <h1>Minha Lista de Jogos</h1>
 
-    <textarea id="jogosTextarea" placeholder="Cole uma lista de jogos aqui"></textarea>
+    <textarea id="jogosTextarea" placeholder="Cole uma lista de jogos aqui, um por linha"></textarea>
     <br>
     <button onclick="adicionarJogos()">Adicionar Jogos</button>
 
     <ul class="game-list" id="listaJogos">
+        <li>
+            <label class="status-checkbox">
+                <input type="checkbox" name="jogado" value="JOGADO">
+            </label>
+            <label class="status-checkbox">
+                <input type="checkbox" name="zerado" value="ZERADO">
+            </label>
+            NOME DO JOGO 1
+        </li>
+        <li>
+            <label class="status-checkbox">
+                <input type="checkbox" name="jogado" value="JOGADO">
+            </label>
+            <label class="status-checkbox">
+                <input type="checkbox" name="zerado" value="ZERADO">
+            </label>
+            NOME DO JOGO 2
+        </li>
         <!-- Adicione mais jogos aqui -->
     </ul>
 

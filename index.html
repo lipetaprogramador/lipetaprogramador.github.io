@@ -47,15 +47,8 @@
         // Adicione um ouvinte de eventos para o seu site
         const gameList = document.getElementById('game-list');
 
-        gameList.addEventListener('click', function(event) {
-            const target = event.target;
-
-            // Exemplo: Se o usuário marcar uma caixa de seleção, salve no Gist
-            if (target.tagName === 'INPUT' && target.type === 'checkbox') {
-                salvarNoGist();
-            }
-
-            // Outras verificações de eventos podem ser adicionadas aqui
+        gameList.addEventListener('change', function(event) {
+            salvarNoGist();
         });
 
         // Seu código para adicionar e marcar itens na lista

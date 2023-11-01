@@ -28,28 +28,52 @@
     <button onclick="adicionarJogos()">Adicionar Jogos</button>
 
     <ul class="game-list" id="listaJogos">
-        <li>
-            <label class="status-checkbox">
-                <input type="checkbox" name="jogado" value="JOGADO">
-            </label>
-            <label class="status-checkbox">
-                <input type="checkbox" name="zerado" value="ZERADO">
-            </label>
-            NOME DO JOGO 1
-        </li>
-        <li>
-            <label class="status-checkbox">
-                <input type="checkbox" name="jogado" value="JOGADO">
-            </label>
-            <label class="status-checkbox">
-                <input type="checkbox" name="zerado" value="ZERADO">
-            </label>
-            NOME DO JOGO 2
-        </li>
-        <!-- Adicione mais jogos aqui -->
+        <!-- Seus jogos aparecerão aqui -->
     </ul>
 
     <script>
+        // Substitua com seu ID de Gist e token de autorização
+        const gistId = 'SEU_GIST_ID';
+        const token = 'SEU_TOKEN_DE_AUTORIZAÇÃO';
+
+        function salvarNoGist() {
+            const apiUrl = `https://api.github.com/gists/${gistId}`;
+            const listaJogosElement = document.getElementById("listaJogos");
+            const listaJogos = [];
+
+            listaJogosElement.querySelectorAll("li").forEach((jogoElement) => {
+                const nomeJogo = jogoElement.innerText.trim().split("\n")[1].trim();
+                listaJogos.push(nomeJogo);
+            });
+
+            const dadosASalvar = {
+                files: {
+                    'seu-arquivo.txt': {
+                        content: listaJogos.join("\n")
+                    }
+                }
+            };
+
+            fetch(apiUrl, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dadosASalvar)
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    console.log('Alterações salvas com sucesso!');
+                } else {
+                    console.error('Falha ao salvar as alterações.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao salvar as alterações:', error);
+            });
+        }
+
         function adicionarJogos() {
             var jogosTextarea = document.getElementById("jogosTextarea");
             var listaJogos = jogosTextarea.value.trim().split('\n');
@@ -74,6 +98,9 @@
             }
 
             jogosTextarea.value = "";
+
+            // Após adicionar ou marcar jogos, salve automaticamente no Gist
+            salvarNoGist();
         }
     </script>
 </body>

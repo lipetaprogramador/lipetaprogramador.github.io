@@ -49,6 +49,41 @@
 
         gameList.addEventListener('change', function(event) {
             salvarNoGist();
+=======
+
+            fetch(apiUrl, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dadosASalvar)
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    console.log('Alterações salvas com sucesso!');
+                } else {
+                    console.error('Falha ao salvar as alterações.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao salvar as alterações:', error);
+            });
+        }
+
+        // Adicione um ouvinte de eventos para o seu site
+        const gameList = document.getElementById('game-list');
+
+        gameList.addEventListener('click', function(event) {
+            const target = event.target;
+
+            // Exemplo: Se o usuário marcar uma caixa de seleção, salve no Gist
+            if (target.tagName === 'INPUT' && target.type === 'checkbox') {
+                salvarNoGist();
+            }
+
+            // Outras verificações de eventos podem ser adicionadas aqui
+>>>>>>> 619343dde7b45e7dfc1d5d55c7b69b5167fefc24
         });
 
         // Seu código para adicionar e marcar itens na lista

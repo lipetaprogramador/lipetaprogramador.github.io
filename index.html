@@ -33,7 +33,7 @@
 
     <script>
         // Substitua com seu ID de Gist e token de autorização
-        const gistId = 'SEU_GIST_ID';
+        const gistId = 'af076af2ddbe2b96d26433fafeac0b6c';
         const token = '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';
 
         function salvarNoGist() {
@@ -42,7 +42,7 @@
             const listaJogos = [];
 
             listaJogosElement.querySelectorAll("li").forEach((jogoElement) => {
-                const nomeJogo = jogoElement.innerText.trim();
+                const nomeJogo = jogoElement.textContent.trim();
                 listaJogos.push(nomeJogo);
             });
 

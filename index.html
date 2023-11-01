@@ -28,50 +28,60 @@
     <button onclick="adicionarJogos()">Adicionar Jogos</button>
 
     <ul class="game-list" id="listaJogos">
-        <!-- Seus jogos aparecerão aqui -->
+        <!-- Os jogos serão carregados aqui a partir da Gist -->
     </ul>
 
     <script>
-        // Substitua com seu ID de Gist e token de autorização
-        const gistId = 'af076af2ddbe2b96d26433fafeac0b6c';
+        // Substitua 'SEU_TOKEN_DE_AUTORIZAÇÃO' pelo seu token OAuth
         const token = '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';
+        // Substitua 'SEU_GIST_ID' pelo ID da sua Gist
+        const gistId = '98f9f5cf78abcac1fbf324e10f840d64';
 
-        function salvarNoGist() {
-            const apiUrl = `https://api.github.com/gists/${gistId}`;
-            const listaJogosElement = document.getElementById("listaJogos");
-            const listaJogos = [];
-
-            listaJogosElement.querySelectorAll("li").forEach((jogoElement) => {
-                const nomeJogo = jogoElement.textContent.trim();
-                listaJogos.push(nomeJogo);
-            });
-
-            const dadosASalvar = {
-                files: {
-                    'seu-arquivo.txt': {
-                        content: listaJogos.join("\n")
+        async function carregarJogos() {
+            try {
+                const response = await fetch(`https://api.github.com/gists/${gistId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `token ${token}`
                     }
-                }
-            };
+                });
 
-            fetch(apiUrl, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(dadosASalvar)
-            })
-            .then(response => {
-                if (response.status === 200) {
+                if (response.ok) {
+                    const gistData = await response.json();
+                    const jogosTextarea = document.getElementById("jogosTextarea");
+                    jogosTextarea.value = gistData.files['lista-de-jogos.txt'].content;
+                } else {
+                    console.error('Falha ao carregar a Gist:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar a Gist:', error);
+            }
+        }
+
+        async function salvarNoGist(conteudo) {
+            try {
+                const response = await fetch(`https://api.github.com/gists/${gistId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `token ${token}`
+                    },
+                    body: JSON.stringify({
+                        files: {
+                            'lista-de-jogos.txt': {
+                                content: conteudo
+                            }
+                        }
+                    })
+                });
+
+                if (response.ok) {
                     console.log('Alterações salvas com sucesso!');
                 } else {
-                    console.error('Falha ao salvar as alterações.');
+                    console.error('Falha ao salvar as alterações:', response.statusText);
                 }
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Erro ao salvar as alterações:', error);
-            });
+            }
         }
 
         function adicionarJogos() {
@@ -99,9 +109,12 @@
 
             jogosTextarea.value = "";
 
-            // Após adicionar ou marcar jogos, salve automaticamente no Gist
-            salvarNoGist();
+            // Salvar as alterações na Gist
+            salvarNoGist(jogosTextarea.value);
         }
+
+        // Carregar a lista de jogos da Gist ao carregar a página
+        carregarJogos();
     </script>
 </body>
 </html>
